@@ -8,10 +8,24 @@ import {
   isSameUser,
 } from "../config/ChatLogics";
 import { ChatState } from "../Context/ChatProvider";
+import { Button } from "@chakra-ui/react";
+import { CopyIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 
 const ScrollableChat = ({ messages }) => {
   const { user } = ChatState();
 
+  function wordFoundInString(inputString, targetWord) {
+    const lowerCaseInput = inputString.toLowerCase();
+    const lowerCaseWord = targetWord.toLowerCase();
+
+    return lowerCaseInput.includes(lowerCaseWord);
+  }
+  function wordNotFoundInString(inputString, targetWord) {
+    const lowerCaseInput = inputString.toLowerCase();
+    const lowerCaseWord = targetWord.toLowerCase();
+
+    return !lowerCaseInput.includes(lowerCaseWord);
+  }
   return (
     <ScrollableFeed>
       {messages &&
@@ -31,6 +45,7 @@ const ScrollableChat = ({ messages }) => {
                 />
               </Tooltip>
             )}
+
             {/* render messages */}
             <span
               style={{
@@ -45,7 +60,38 @@ const ScrollableChat = ({ messages }) => {
                 maxWidth: "75%",
               }}
             >
-              {m.content}
+              {wordNotFoundInString(m.content, "http://res.cloudinary.com")
+                ? m.content
+                : "Photo"}
+              {/* {console.log(m)} */}
+              {wordNotFoundInString(m.content, "http://res.cloudinary.com") && (
+                <Button
+                  size="md"
+                  colorScheme=""
+                  key={m._id}
+                  onClick={(e) => {
+                    e.preventDefault();
+
+                    navigator.clipboard.writeText(m.content);
+                  }}
+                >
+                  <CopyIcon w={4} h={4} color="black" size={"xl"} />
+                </Button>
+              )}
+
+              {wordFoundInString(m.content, "http://res.cloudinary.com") && (
+                <Button
+                  size="md"
+                  colorScheme=""
+                  key={m._id}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open(`${m.content}`, "_blank");
+                  }}
+                >
+                  <ExternalLinkIcon color="black" />
+                </Button>
+              )}
             </span>
           </div>
         ))}

@@ -33,6 +33,9 @@ import { Effect } from "react-notification-badge";
 import { getSender } from "../../config/ChatLogics";
 import UserListItem from "../userAvatar/UserListItem";
 import { ChatState } from "../../Context/ChatProvider";
+import TranslateModal from "./TranslateModal";
+import TranslateModal2 from "./TranslateModal2";
+import ChatbotModal from "./ChatbotModal";
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
@@ -152,7 +155,16 @@ function SideDrawer() {
         <Text fontSize="2xl" fontFamily="Work sans">
           Chat HUB
         </Text>
+
+        <div class="feature_container">
+          {/* Translate Menu */}
+
+          <TranslateModal2 />
+          <ChatbotModal />
+          {/* <TranslateModal /> */}
+        </div>
         <div>
+          {/* Notification Menu */}
           <Menu>
             <MenuButton p={1}>
               {/*NotificationBadge for notification count animation  */}

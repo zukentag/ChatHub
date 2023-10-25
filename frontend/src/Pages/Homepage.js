@@ -1,6 +1,7 @@
 import {
   Box,
   Container,
+  Hide,
   Tab,
   TabList,
   TabPanel,
@@ -14,6 +15,9 @@ import Login from "../components/Authentication/Login";
 import Signup from "../components/Authentication/Signup";
 import { Image } from "@chakra-ui/react";
 import Logo from "../asset/logo.svg";
+import ChatHUB from "../asset/chathub.png";
+import Fox from "../asset/fox2.gif";
+import { black } from "colors";
 
 function Homepage() {
   //The useHistory hook gives you access to the history instance that you may use to navigate.
@@ -37,10 +41,16 @@ function Homepage() {
         m="40px 0 15px 0"
         borderRadius="lg"
         borderWidth="1px"
+        zIndex={2}
       >
         <Text display="flex" fontSize="4xl" fontFamily="Work sans">
-          <Image height="4rem" src={Logo} alt="Logo" />
-          Chat HUB
+          <Image
+            height="4rem"
+            src={ChatHUB}
+            alt="Logo"
+            justifyContent={"center"}
+          />
+          {/* Chat HUB */}
         </Text>
       </Box>
       <Box bg="white" w="100%" p={4} borderRadius="lg" borderWidth="1px">
@@ -59,6 +69,23 @@ function Homepage() {
           </TabPanels>
         </Tabs>
       </Box>
+
+      <Image
+        left={6}
+        borderRadius={"full"}
+        background={"white"}
+        width={80}
+        top={40}
+        // display={"flex"}
+        display={{ base: "none", xl: "block" }}
+        position={"fixed"}
+        overflow={"hidden"}
+        zIndex={1}
+        // position={{ base: "fixed", md: "relative" }}
+        src={Fox}
+      />
+
+      {/* <Text>Hello</Text> */}
     </Container>
   );
 }

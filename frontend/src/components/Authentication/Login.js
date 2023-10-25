@@ -52,7 +52,6 @@ const Login = () => {
         duration: 5000,
         isClosable: true,
         position: "bottom",
-        
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
@@ -60,7 +59,7 @@ const Login = () => {
     } catch (error) {
       toast({
         title: "Error Occured!",
-        description: error.response.data.message,
+        // description: error.response.data.message,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -104,7 +103,7 @@ const Login = () => {
         onClick={submitHandler}
         isLoading={loading}
       >
-        Login 
+        Login
       </Button>
       <Button
         variant="solid"

@@ -8,6 +8,7 @@ import ChatLoading from "./ChatLoading";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
 import { Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
+import { hidden } from "colors";
 
 // fetchAgain is the parent state & is responsiple to update user lists in Mychats
 const MyChats = ({ fetchAgain }) => {
@@ -58,6 +59,8 @@ const MyChats = ({ fetchAgain }) => {
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
+      // position={"relative"}
+      // zIndex={1}
     >
       <Box
         pb={3}
@@ -72,10 +75,17 @@ const MyChats = ({ fetchAgain }) => {
         {/* Modal For Group Chat */}
         <GroupChatModal>
           <Button
+            // overflow={"hidden"}
             display="flex"
+            // position={"relative"}
             fontSize={{ base: "17px", md: "10px", lg: "17px" }}
             rightIcon={<AddIcon />}
-            bg="#9cacf5"
+            // bg="#9cacf5"
+            bg="#724ae8"
+            color={"white"}
+            // colorScheme="pink"
+            // zIndex={"1"}
+            // zIndex={1}
           >
             New Group
           </Button>

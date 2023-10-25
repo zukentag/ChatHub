@@ -1,4 +1,4 @@
-import { FormControl } from "@chakra-ui/form-control";
+import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
 import Emoji from "../asset/emoji.svg";
@@ -7,7 +7,7 @@ import { IconButton, Spinner, useToast } from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../config/ChatLogics";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, AddIcon } from "@chakra-ui/icons";
 import ProfileModal from "./miscellaneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
 import Lottie from "react-lottie";
@@ -20,6 +20,7 @@ import { Image } from "@chakra-ui/react";
 import Robot from "../asset/robot.gif";
 import { PlusSquareIcon } from "@chakra-ui/icons";
 import Picker from "emoji-picker-react";
+import { black } from "colors";
 
 // Socket.io
 
@@ -32,7 +33,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [newMessage, setNewMessage] = useState("");
   const [socketConnected, setSocketConnected] = useState(false); // Connection status of a socket
   const [showEmojiPicker, setshowEmojiPicker] = useState(false); // For Emoji Picker
-
+  const [pic, setPic] = useState();
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
   const toast = useToast();
@@ -197,6 +198,63 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     setNewMessage(message);
   };
 
+  // handel image upload
+  // const handelImage = async (e) => {
+  //   const file = e.target.files[0];
+  //   let formData = new formData();
+  //   formData.append("image", file);
+  //   console.log([...formData]);
+  // };
+
+  // to uplod pic to cloud
+  const postDetails = (pics) => {
+    setLoading(true);
+    if (pics === undefined) {
+      toast({
+        title: "Please Select an Image!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    }
+    console.log(pics);
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "chat-hub");
+      data.append("cloud_name", "dyjnlh1ef");
+      fetch("https://api.cloudinary.com/v1_1/dyjnlh1ef/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPic(data.url.toString());
+          console.log(data.url.toString());
+          /////////////////
+          const message = newMessage + data.url.toString();
+          setNewMessage(message);
+          ////////////////////
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    } else {
+      toast({
+        title: "Please Select an Image!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
+  };
   return (
     <>
       {/* If a chat is selected then show the chat else show  Click on a user to start chatting  */}
@@ -325,6 +383,31 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 value={newMessage}
                 onChange={typingHandler}
               />
+              <Box display={"flex"} justifyContent={"space-between"}>
+                <label>
+                  <AddIcon />
+                  <input
+                    // size="sm"
+                    type="file"
+                    accept="images/*"
+                    onChange={(e) => postDetails(e.target.files[0])}
+                    hidden
+                    // icon={<AddIcon />}
+                  />
+                </label>
+              </Box>
+              {/* <FormControl id="pic">
+                <FormLabel>Profile Picture</FormLabel>
+                <Input
+                  type="file"
+                  
+                  accept="image/*"
+                  
+                  onChange={(e) => postDetails(e.target.files[0])}
+                  hidden
+                />
+                <IconButton icon={<AddIcon />} />
+              </FormControl> */}
             </FormControl>
           </Box>
         </>
