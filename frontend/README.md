@@ -68,3 +68,24 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `yarn build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+// "@chakra-ui/icons": "^1.0.13",
+// "@chakra-ui/react": "^1.6.2",
+// "@emotion/react": "^11",
+// "@emotion/styled": "^11",
+// "@testing-library/jest-dom": "^5.11.4",
+// "@testing-library/react": "^11.1.0",
+// "@testing-library/user-event": "^12.1.10",
+// "axios": "^0.21.1",
+// "emoji-picker-react": "^4.4.9",
+// "framer-motion": "^4",
+// "react": "^16.8.6",
+// "react-dom": "^16.8.6",
+// "react-chips": "^0.8.0",
+// "react-lottie": "^1.2.3",
+// "react-notification-badge": "^1.5.1",
+// "react-router-dom": "^5.2.0",
+// "react-scripts": "4.0.3",
+// "react-scrollable-feed": "^1.3.1",
+// "socket.io-client": "^4.1.2",
+// "web-vitals": "^1.0.1"

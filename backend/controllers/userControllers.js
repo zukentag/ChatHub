@@ -6,14 +6,15 @@ const { use } = require("../routes/userRoutes");
 // To Register User  Sign up page
 // asyncHandler to handel errors
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, pic } = req.body; // taking value from frontend , so tell server to accept the data
+  const { name, email, password, pic } = req.body; // Destructuring request body
 
   if (!name || !email || !password) {
     res.status(400);
     throw new Error("Please Enter all the Feilds");
   }
 
-  const userExists = await User.findOne({ email }); // email for every user is unique
+  // email for every user is unique
+  const userExists = await User.findOne({ email });
 
   if (userExists) {
     res.status(400);
@@ -33,7 +34,7 @@ const registerUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       pic: user.pic,
-      token: generateToken(user._id), // jwt for authorization
+      token: generateToken(user._id), // return jwt  auth token
     });
   } else {
     res.status(400);
@@ -78,7 +79,8 @@ const allUser = asyncHandler(async (req, res) => {
       }
     : {}; // else part
 
-  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } }); //$ne --> not equals;
+  //$ne --> not equals;
+  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
   res.send(users);
 });
 module.exports = { registerUser, authUser, allUser };

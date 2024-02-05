@@ -8,7 +8,7 @@ import ChatLoading from "./ChatLoading";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
 import { Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
-import { hidden } from "colors";
+// import { hidden } from "colors";
 
 // fetchAgain is the parent state & is responsiple to update user lists in Mychats
 const MyChats = ({ fetchAgain }) => {

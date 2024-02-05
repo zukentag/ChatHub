@@ -21,21 +21,22 @@ import {
 import { Tooltip } from "@chakra-ui/tooltip";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { Avatar } from "@chakra-ui/avatar";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/toast";
 import ChatLoading from "../ChatLoading";
 import { Spinner } from "@chakra-ui/spinner";
 import ProfileModal from "./ProfileModal";
-import NotificationBadge from "react-notification-badge";
-import { Effect } from "react-notification-badge";
+// import NotificationBadge from "react-notification-badge";
+// import { Effect } from "react-notification-badge";
 import { getSender } from "../../config/ChatLogics";
 import UserListItem from "../userAvatar/UserListItem";
 import { ChatState } from "../../Context/ChatProvider";
 import TranslateModal from "./TranslateModal";
 import TranslateModal2 from "./TranslateModal2";
 import ChatbotModal from "./ChatbotModal";
+import { wrap } from "framer-motion";
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
@@ -54,12 +55,13 @@ function SideDrawer() {
 
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   // Logout Button
   const logoutHandler = () => {
     localStorage.removeItem("userInfo");
-    history.push("/");
+    // history.push("/");
+    navigate("/");
   };
 
   // Searching in Side Drawer
@@ -136,7 +138,8 @@ function SideDrawer() {
   return (
     <>
       <Box
-        d="flex"
+        display="flex"
+        flex={wrap}
         justifyContent="space-between"
         alignItems="center"
         bg="white"
@@ -157,21 +160,18 @@ function SideDrawer() {
         </Text>
 
         <div class="feature_container">
-          {/* Translate Menu */}
-
           <TranslateModal2 />
           <ChatbotModal />
-          {/* <TranslateModal /> */}
         </div>
         <div>
           {/* Notification Menu */}
           <Menu>
             <MenuButton p={1}>
               {/*NotificationBadge for notification count animation  */}
-              <NotificationBadge
+              {/* <NotificationBadge
                 count={notification.length}
                 effect={Effect.SCALE}
-              />
+              /> */}
               <BellIcon fontSize="2xl" m={1} />
             </MenuButton>
 

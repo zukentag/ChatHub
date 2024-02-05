@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useState } from "react";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 
 const Signup = () => {
   const [name, setName] = useState();
@@ -18,7 +18,7 @@ const Signup = () => {
   const [confirmpassword, setConfirmpassword] = useState();
   const [password, setPassword] = useState();
   const [pic, setPic] = useState();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [show, setShow] = useState(false); // State to show password
   const [loading, setLoading] = useState(false); // loading state while uploading
 
@@ -127,7 +127,8 @@ const Signup = () => {
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      history.push("/chats");
+      // history.push("/chats");
+      navigate("/chats");
     } catch (error) {
       toast({
         title: "Error Occured!",

@@ -21,8 +21,9 @@ const userSchema = mongoose.Schema(
   { timestaps: true }
 );
 
+// to compare entered password and encrypted password
 userSchema.methods.matchPassword = async function (enteredPassword) {
-  return bcrypt.compare(enteredPassword, this.password); // to compare entered password and encrypted password
+  return bcrypt.compare(enteredPassword, this.password);
 };
 
 // Before Saving Encrypt the password

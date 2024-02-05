@@ -1,14 +1,15 @@
 import "./App.css";
 import Homepage from "./Pages/Homepage";
-import { Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Chatpage from "./Pages/Chatpage";
 
 function App() {
   return (
     <div className="App">
-      {/* exact so that home page is not also renderd with other pages */}
-      <Route path="/" component={Homepage} exact />
-      <Route path="/chats" component={Chatpage} />
+      <Routes>
+        <Route path="/" element={<Homepage />} exact />
+        <Route path="/chats" element={<Chatpage />} />
+      </Routes>
     </div>
   );
 }

@@ -18,9 +18,8 @@ import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import { ChatState } from "../Context/ChatProvider";
 import { Image } from "@chakra-ui/react";
 import Robot from "../asset/robot.gif";
-import { PlusSquareIcon } from "@chakra-ui/icons";
+// import { PlusSquareIcon } from "@chakra-ui/icons";
 import Picker from "emoji-picker-react";
-import { black } from "colors";
 
 // Socket.io
 

@@ -10,25 +10,25 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import Login from "../components/Authentication/Login";
 import Signup from "../components/Authentication/Signup";
 import { Image } from "@chakra-ui/react";
-import Logo from "../asset/logo.svg";
 import ChatHUB from "../asset/chathub.png";
 import Fox from "../asset/fox2.gif";
-import { black } from "colors";
 
 function Homepage() {
   //The useHistory hook gives you access to the history instance that you may use to navigate.
-  const history = useHistory();
+  const navigate = useNavigate();
   useEffect(() => {
     // localStorage.getItem("userInfo") stores user info in local storage in stringify format
     const user = JSON.parse(localStorage.getItem("userInfo"));
 
-    // if user is not logged in redirect to login page
-    if (user) history.push("/chats");
-  }, [history]);
+    if (user) {
+      // Navigate to the "/chats" route
+      navigate("/chats");
+    }
+  }, [navigate]);
 
   return (
     <Container maxW="xl" centerContent>
@@ -50,7 +50,6 @@ function Homepage() {
             alt="Logo"
             justifyContent={"center"}
           />
-          {/* Chat HUB */}
         </Text>
       </Box>
       <Box bg="white" w="100%" p={4} borderRadius="lg" borderWidth="1px">
@@ -76,16 +75,12 @@ function Homepage() {
         background={"white"}
         width={80}
         top={40}
-        // display={"flex"}
         display={{ base: "none", xl: "block" }}
         position={"fixed"}
         overflow={"hidden"}
         zIndex={1}
-        // position={{ base: "fixed", md: "relative" }}
         src={Fox}
       />
-
-      {/* <Text>Hello</Text> */}
     </Container>
   );
 }

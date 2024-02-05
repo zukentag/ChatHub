@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // Create a Chat Context for easier state management
 const ChatContext = createContext();
 
@@ -12,7 +12,7 @@ const ChatProvider = ({ children }) => {
   const [chats, setChats] = useState(); // populate all of the current chats with user
 
   //The useHistory hook gives you access to the history instance that you may use to navigate.
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // localStorage.getItem("userInfo") stores user info in local storage in stringify format
@@ -20,9 +20,12 @@ const ChatProvider = ({ children }) => {
     setUser(userInfo);
 
     // if user is not logged in redirect to login page
-    if (!userInfo) history.push("/");
+    if (!userInfo) {
+      // history.push("/");
+      navigate("/");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [history]); // whenever history changes it is going to run again
+  }, [navigate]); // whenever history changes it is going to run again
 
   return (
     <ChatContext.Provider

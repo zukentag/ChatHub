@@ -2,7 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const { chats } = require("./data");
 const connectDB = require("./config/db");
-const colors = require("colors");
+// const colors = require("colors");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
@@ -35,10 +35,7 @@ app.use(errorHandler); // any other error
 
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(
-  PORT,
-  console.log(`Server Started on Port ${PORT}`.yellow.bold)
-);
+const server = app.listen(PORT, console.log(`Server Started on Port ${PORT}`));
 
 // Socket.io
 // pingTimeout --> time it will wait while being inactive
