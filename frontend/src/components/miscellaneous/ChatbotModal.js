@@ -10,13 +10,19 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
+  Container,
+  Icon,
 } from "@chakra-ui/react";
+import { Bot, XCircle } from "lucide-react";
+
+const apiUrl = process.env.REACT_APP_CONTENT_TYPE;
+const rapidAPIKey = process.env.REACT_APP_X_RAPIDAPI_KEY;
+const rapidAPIHost = process.env.REACT_APP_X_RAPIDAPI_HOST;
 
 const ChatbotModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [userMessage, setUserMessage] = useState(null);
   const chatbox = document.querySelector(".chatbox");
-  const chatInput = document.querySelector(".chat-input textarea");
 
   const createChatLi = (message, className) => {
     const chatLi = document.createElement("li");
@@ -48,13 +54,13 @@ const ChatbotModal = () => {
   async function callRapidAPI(chatElement) {
     const messageElement = chatElement.querySelector("p");
 
-    const url = "https://chatgpt-gpt4-ai-chatbot.p.rapidapi.com/ask";
+    const url = apiUrl;
     const options = {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "X-RapidAPI-Key": "41bcaab171mshb93ee104e7450a2p1e54d7jsn63fd13e1ddc2",
-        "X-RapidAPI-Host": "chatgpt-gpt4-ai-chatbot.p.rapidapi.com",
+        "X-RapidAPI-Key": rapidAPIKey,
+        "X-RapidAPI-Host": rapidAPIHost,
       },
       body: JSON.stringify({
         query: userMessage.trim(),
@@ -78,16 +84,34 @@ const ChatbotModal = () => {
   return (
     <>
       <div>
-        <button class="chatbot-toggler" onClick={onOpen}>
-          <span class="material-symbols-outlined">robot</span>
-          <span class="material-symbols-outlined">close</span>
-        </button>
+        <Button
+          backgroundColor={"#724ae8"}
+          borderRadius={"50"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          onClick={onOpen}
+          _hover={{ backgroundColor: "blue" }}
+        >
+          {!isOpen ? (
+            <Bot color="white" size={24} />
+          ) : (
+            <XCircle color="white" size={20} />
+          )}
+        </Button>
+
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Chat Bot</ModalHeader>
+            <ModalHeader
+              backgroundColor="#724ae8"
+              textAlign={"center"}
+              fontSize={24}
+              fontWeight={700}
+            >
+              Chat Bot
+            </ModalHeader>
             <ModalCloseButton />
-            <ModalBody>
+            <ModalBody marginTop={2}>
               <ul class="chatbox">
                 <li class="chat incoming">
                   <span class="material-symbols-outlined">smart_toy</span>
@@ -100,21 +124,25 @@ const ChatbotModal = () => {
               </ul>
               <div class="chat-input">
                 <Input
-                  placeholder="Enter a message..."
+                  marginTop={10}
+                  marginBottom={2}
+                  placeholder="Ask me anything..."
                   spellCheck={false}
                   value={userMessage}
                   onChange={(e) => setUserMessage(e.target.value)}
                 />
               </div>
-
-              <Button
-                colorScheme="blue"
-                mr={3}
-                onClick={handleChat}
-                justifyContent="center"
-              >
-                Send
-              </Button>
+              <Container justifyContent={"right"} display="flex">
+                <Button
+                  marginTop={2}
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={handleChat}
+                  justifyContent="center"
+                >
+                  Ask
+                </Button>
+              </Container>
             </ModalBody>
 
             <ModalFooter></ModalFooter>
