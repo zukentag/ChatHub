@@ -3,7 +3,7 @@
 import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Input } from "@chakra-ui/input";
-import { Box, Text } from "@chakra-ui/layout";
+import { Box, Text, Container } from "@chakra-ui/layout";
 import {
   Menu,
   MenuButton,
@@ -35,6 +35,7 @@ import { ChatState } from "../../Context/ChatProvider";
 import TranslateModal from "./TranslateModal";
 import ChatbotModal from "./ChatbotModal";
 import { wrap } from "framer-motion";
+// import { Container } from "lucide-react";
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
@@ -157,10 +158,19 @@ function SideDrawer() {
           Chat HUB
         </Text>
 
-        <div class="feature_container">
+        <Container
+          display={"flex"}
+          gap={2}
+          justifyContent={"right"}
+          alignItems={"right"}
+          textAlign={"right"}
+          margin={0}
+          padding={0}
+        >
           <TranslateModal />
           <ChatbotModal />
-        </div>
+        </Container>
+
         <div>
           {/* Notification Menu */}
           <Menu>

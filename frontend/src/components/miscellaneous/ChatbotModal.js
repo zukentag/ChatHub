@@ -12,6 +12,7 @@ import {
   Button,
   Container,
   Icon,
+  IconButton,
 } from "@chakra-ui/react";
 import { Bot, XCircle } from "lucide-react";
 
@@ -84,26 +85,26 @@ const ChatbotModal = () => {
   return (
     <>
       <div>
-        <Button
+        <IconButton
           backgroundColor={"#724ae8"}
           borderRadius={"50"}
           justifyContent={"center"}
           alignItems={"center"}
           onClick={onOpen}
-          _hover={{ backgroundColor: "blue" }}
+          _hover={{ backgroundColor: "#5372f0" }}
         >
           {!isOpen ? (
             <Bot color="white" size={24} />
           ) : (
             <XCircle color="white" size={20} />
           )}
-        </Button>
+        </IconButton>
 
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader
-              backgroundColor="#724ae8"
+              backgroundColor="#5372f0"
               textAlign={"center"}
               fontSize={24}
               fontWeight={700}
