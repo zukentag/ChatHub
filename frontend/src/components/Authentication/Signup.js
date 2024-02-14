@@ -11,26 +11,24 @@ import {
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import validator from "email-validator";
 
 const Signup = () => {
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [confirmpassword, setConfirmpassword] = useState();
-  const [password, setPassword] = useState();
-  const [pic, setPic] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [confirmpassword, setConfirmpassword] = useState("");
+  const [password, setPassword] = useState("");
+  const [pic, setPic] = useState("");
   const navigate = useNavigate();
-  const [show, setShow] = useState(false); // State to show password
-  const [loading, setLoading] = useState(false); // loading state while uploading
+  const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Using toast to show pop-up
   const toast = useToast();
 
-  // to hide or show password
   const handelClick = () => {
     setShow(!show);
   };
 
-  // to uplod pic to cloud
   const postDetails = (pics) => {
     setLoading(true);
     if (pics === undefined) {
@@ -75,29 +73,61 @@ const Signup = () => {
       return;
     }
   };
+  const isValidEmail = (email) => {
+    return validator.validate(email);
+  };
 
-  // Store Data to Database
-  const submitHandler = async () => {
+  const submitHandler = async (e) => {
+    e.preventDefault();
     setLoading(true);
+
     if (!name || !email || !password || !confirmpassword) {
       toast({
         title: "Please Fill all the Feilds",
         status: "warning",
-        duration: 5000,
+        duration: 2000,
         isClosable: true,
-        position: "bottom",
+        position: "top",
       });
       setLoading(false);
       return;
     }
+
+    if (!isValidEmail(email)) {
+      setError("Invalid email address");
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6  characters");
+    } else if (
+      !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{6,}$/.test(password)
+    ) {
+      setError(
+        "Password must contain at least one uppercase letter, one digit, one special character"
+      );
+    }
+
+    if (error) {
+      toast({
+        title: error,
+        status: "warning",
+        duration: 2000,
+        isClosable: true,
+        position: "top",
+      });
+      setLoading(false);
+      return;
+    }
+
     if (password !== confirmpassword) {
       toast({
         title: "Passwords Do Not Match",
         status: "warning",
-        duration: 5000,
+        duration: 2000,
         isClosable: true,
         position: "bottom",
       });
+      setLoading(false);
       return;
     }
 
