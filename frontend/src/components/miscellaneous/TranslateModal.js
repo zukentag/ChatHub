@@ -15,6 +15,7 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { Languages, XCircle, Volume2, Copy, Repeat, Check } from "lucide-react";
+import { Spinner } from "@chakra-ui/react";
 
 let speak = false;
 const TranslateModal = () => {
@@ -23,16 +24,29 @@ const TranslateModal = () => {
   const [toLanguage, setToLanguage] = useState("hi-IN");
   const [inputText, setInputText] = useState("");
   const [outputText, setOutputText] = useState("");
-  const [copied, setCopied] = useState(false);
-  const [volume, setVolume] = useState(false);
+  const [copiedFrom, setCopiedFrom] = useState(false);
+  const [copiedTo, setCopiedTo] = useState(false);
+  const [volumeFrom, setVolumeFrom] = useState(false);
+  const [volumeTo, setVolumeTo] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleCopy = (e) => {
+  const handelClose = () => {
+    onClose();
+    setInputText("");
+    setOutputText("");
+  };
+  const handleCopy = (e, dist) => {
     navigator.clipboard.writeText(e);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1000);
+    if (dist === "from") {
+      setCopiedFrom(true);
+      setTimeout(() => setCopiedFrom(false), 1000);
+    } else {
+      setCopiedTo(true);
+      setTimeout(() => setCopiedTo(false), 1000);
+    }
   };
 
-  const handleVolume = (e, lang) => {
+  const handleVolume = (e, lang, dist) => {
     let utterance = null;
 
     utterance = new SpeechSynthesisUtterance(e);
@@ -41,96 +55,32 @@ const TranslateModal = () => {
     if (utterance !== null) {
       speechSynthesis.speak(utterance);
     }
-    setVolume(true);
-    setTimeout(() => setVolume(false), 1000);
+    if (dist === "from") {
+      setVolumeFrom(true);
+      setTimeout(() => setVolumeFrom(false), 1000);
+    } else {
+      setVolumeTo(true);
+      setTimeout(() => setVolumeTo(false), 1000);
+    }
   };
 
-  const fromText = document.querySelector(".from-text");
-  const toText = document.querySelector(".to-text");
-  const exchageIcon = document.querySelector(".exchange");
+  const handelTranslate = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    speak = false;
+    let text = inputText.trim(),
+      translateFrom = fromLanguage,
+      translateTo = toLanguage;
 
-  const selectTag = document.querySelectorAll("select");
-  const icons = document.querySelectorAll(".row i");
-  const translateBtn = document.querySelector(".translate");
-
-  if (exchageIcon !== null) {
-    exchageIcon.addEventListener("click", () => {
-      let tempText = fromText.value,
-        tempLang = selectTag[0].value;
-      fromText.value = toText.value;
-      toText.value = tempText;
-      selectTag[0].value = selectTag[1].value;
-      selectTag[1].value = tempLang;
-    });
-  }
-
-  if (fromText !== null) {
-    fromText.addEventListener("keyup", () => {
-      if (!fromText.value) {
-        toText.value = "";
-      }
-    });
-  }
-
-  if (translateBtn !== null) {
-    translateBtn.addEventListener("click", () => {
-      speak = false;
-      let text = fromText.value.trim(),
-        translateFrom = selectTag[0].value,
-        translateTo = selectTag[1].value;
-
-      if (!text) return;
-      toText.setAttribute("placeholder", "Translating...");
-      let apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${translateFrom}|${translateTo}`;
-      const url = fetch(apiUrl)
-        .then((res) => res.json())
-        .then((data) => {
-          toText.value = data.responseData.translatedText;
-          data.matches.forEach((data) => {
-            if (data.id === 0) {
-              toText.value = data.translation;
-            }
-          });
-          toText.setAttribute("placeholder", "Translation");
-        });
-    });
-  }
-
-  icons.forEach((icon) => {
-    icon.addEventListener("click", function (e) {
-      if (e.stopPropagation) e.stopPropagation();
-      e.preventDefault(); // Prevent default action
-
-      const { target } = e;
-
-      if (!fromText.value || !toText.value) return;
-
-      if (target.classList.contains("fa-copy")) {
-        if (target.id == "from") {
-          navigator.clipboard.writeText(fromText.value);
-        } else {
-          navigator.clipboard.writeText(toText.value);
-        }
-      } else {
-        let utterance;
-        if (target.id == "from") {
-          utterance = new SpeechSynthesisUtterance(fromText.value);
-          utterance.lang = selectTag[0].value;
-        } else {
-          utterance = new SpeechSynthesisUtterance(toText.value);
-          utterance.lang = selectTag[1].value;
-        }
-        if (utterance !== null && !speak) {
-          console.log(utterance);
-          speechSynthesis.speak(utterance);
-          utterance = null;
-          speak = true;
-          // window.reload();
-          // window.location.reload();
-        }
-      }
-    });
-  });
+    if (!text) return;
+    let apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${translateFrom}|${translateTo}`;
+    await fetch(apiUrl)
+      .then((res) => res.json())
+      .then((data) => {
+        setOutputText(data.responseData.translatedText);
+      });
+    setLoading(false);
+  };
 
   return (
     <>
@@ -149,7 +99,7 @@ const TranslateModal = () => {
             <XCircle color="white" size={20} />
           )}
         </IconButton>
-        <Modal isOpen={isOpen} onClose={onClose} size={"xl"}>
+        <Modal isOpen={isOpen} onClose={handelClose} size={"xl"}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader
@@ -180,7 +130,7 @@ const TranslateModal = () => {
                     readOnly
                     disabled
                     className="to-text"
-                    placeholder="Translation"
+                    // placeholder={loading?"tran":"Translation"}
                     value={outputText}
                   />
                 </Flex>
@@ -190,10 +140,10 @@ const TranslateModal = () => {
                       mr={2}
                       aria-label="Speak input"
                       onClick={() => {
-                        handleVolume(inputText, fromLanguage);
+                        handleVolume(inputText, fromLanguage, "from");
                       }}
                       icon={
-                        !volume ? (
+                        !volumeFrom ? (
                           <Volume2 size={28} strokeWidth={0.5} />
                         ) : (
                           <Check size={28} strokeWidth={0.5} />
@@ -202,9 +152,9 @@ const TranslateModal = () => {
                     />
                     <IconButton
                       aria-label="Copy input"
-                      onClick={() => handleCopy(inputText)}
+                      onClick={() => handleCopy(inputText, "from")}
                       icon={
-                        !copied ? (
+                        !copiedFrom ? (
                           <Copy size={28} strokeWidth={0.5} />
                         ) : (
                           <Check size={28} strokeWidth={0.5} />
@@ -244,10 +194,10 @@ const TranslateModal = () => {
                       mr={2}
                       aria-label="Speak input"
                       onClick={() => {
-                        handleVolume(outputText, toLanguage);
+                        handleVolume(outputText, toLanguage, "to");
                       }}
                       icon={
-                        !volume ? (
+                        !volumeTo ? (
                           <Volume2 size={28} strokeWidth={0.5} />
                         ) : (
                           <Check size={28} strokeWidth={0.5} />
@@ -256,9 +206,9 @@ const TranslateModal = () => {
                     />
                     <IconButton
                       aria-label="Copy input"
-                      onClick={() => handleCopy(outputText)}
+                      onClick={() => handleCopy(outputText, "to")}
                       icon={
-                        !copied ? (
+                        !copiedTo ? (
                           <Copy size={28} strokeWidth={0.5} />
                         ) : (
                           <Check size={28} strokeWidth={0.5} />
@@ -270,8 +220,13 @@ const TranslateModal = () => {
               </Flex>
             </ModalBody>
             <ModalFooter display={"flex"} justifyContent={"center"}>
-              <Button class="translate" backgroundColor="#5372f0">
-                Translate Text
+              <Button
+                type="button"
+                colorScheme="blue"
+                marginTop={1}
+                onClick={handelTranslate}
+              >
+                {loading ? <Spinner /> : "Translate Text"}
               </Button>
             </ModalFooter>
           </ModalContent>
