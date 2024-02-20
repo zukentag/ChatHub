@@ -21,6 +21,7 @@ const Signup = () => {
   const [pic, setPic] = useState("");
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const toast = useToast();
@@ -74,7 +75,12 @@ const Signup = () => {
     }
   };
   const isValidEmail = (email) => {
-    return validator.validate(email);
+    console.log(email);
+
+    if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+      return true;
+    }
+    return false;
   };
 
   const submitHandler = async (e) => {
@@ -93,19 +99,37 @@ const Signup = () => {
       return;
     }
 
-    if (!isValidEmail(email)) {
-      setError("Invalid email address");
+    // console.log("-->", isValidEmail(email));
+    if (isValidEmail(email) === false) {
+      toast({
+        title: "Invalid Email Address",
+        status: "warning",
+        duration: 2000,
+        isClosable: true,
+        position: "top",
+      });
+      setLoading(false);
+      return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6  characters");
-    } else if (
-      !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{6,}$/.test(password)
-    ) {
-      setError(
-        "Password must contain at least one uppercase letter, one digit, one special character"
-      );
+      toast({
+        title: "Password must be at least 6  characters",
+        status: "warning",
+        duration: 2000,
+        isClosable: true,
+        position: "top",
+      });
+      setLoading(false);
+      return;
     }
+    // else if (
+    //   !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{6,}$/.test(password)
+    // ) {
+    //   setError(
+    //     "Password must contain at least one uppercase letter, one digit, one special character"
+    //   );
+    // }
 
     if (error) {
       toast({
@@ -125,7 +149,7 @@ const Signup = () => {
         status: "warning",
         duration: 2000,
         isClosable: true,
-        position: "bottom",
+        position: "top",
       });
       setLoading(false);
       return;
