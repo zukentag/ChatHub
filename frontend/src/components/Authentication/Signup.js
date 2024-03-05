@@ -11,8 +11,6 @@ import {
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import validator from "email-validator";
-
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
