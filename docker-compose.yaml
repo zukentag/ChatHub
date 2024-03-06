@@ -30,34 +30,3 @@ services:
 
 networks:
   chatHub_network:
-# version: "3"
-# services:
-#   frontend:
-#     build:
-#       context: "./frontend"
-#       dockerfile: Dockerfile
-#     ports:
-#       - 3000:3000
-#     container_name: frontend_container
-#     environment:
-#       - WATCHPACK_POOLIN=true
-#     networks:
-#       - chatHub_network
-#     volumes:
-#       - ./frontend:/app
-#     depends_on:
-#       - backend
-
-#   backend:
-#     build:
-#       context: "./backend"
-#       dockerfile: Dockerfile
-#     ports:
-#       - 5000:5000
-#     container_name: backend_container
-#     networks:
-#       - chatHub_network
-#     volumes:
-#       - ./backend:/app
-
-# networks: chatHub_network
